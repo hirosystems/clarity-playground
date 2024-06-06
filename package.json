@@ -1,0 +1,17 @@
+{
+  "name": "onlinerepl",
+  "version": "1.0.0",
+  "description": "A simple online REPL for Clarity",
+  "scripts": {
+    "start": "serve"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@hirosystems/clarinet-sdk-browser": "2.7.0-beta5",
+    "@stacks/transactions": "6.15.0",
+    "monaco-editor": "0.49.0",
+    "serve": "^14.2.3"
+  }
+}

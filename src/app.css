@@ -1,0 +1,150 @@
+html {
+  box-sizing: border-box;
+}
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+:root {
+  --color-primary: rgba(255, 255, 255, 0.88);
+  --color-secondary: #3e3e42;
+  --color-tertiary: #2d2d30;
+  --color-editor-bg: #1e1e1e;
+  --color-background: #111;
+
+  --input-padding: 0.4rem;
+
+  --gap: 2rem;
+  --header-height: 4rem;
+}
+
+body,
+html {
+  margin: 0;
+  height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: monospace;
+  background-color: var(--color-background);
+  color: var(--color-primary);
+  height: 100vh;
+}
+
+/*  layout */
+
+header {
+  height: var(--header-height);
+  padding: 0 var(--gap);
+
+  h1 {
+    line-height: var(--header-height);
+    margin: 0;
+  }
+}
+
+#container {
+  display: flex;
+  gap: var(--gap);
+
+  height: calc(100vh - var(--header-height));
+
+  padding: var(--gap);
+  padding-top: 0;
+}
+
+#editor-container {
+  position: relative;
+  flex: 1;
+  padding: calc(var(--gap) / 2) 0;
+  border: solid 2px var(--color-tertiary);
+  background-color: var(--color-editor-bg);
+
+  button {
+    position: absolute;
+    bottom: calc(var(--gap) / 2);
+    right: calc(var(--gap) / 2);
+  }
+}
+
+/* console input / output */
+#editor {
+  width: 100%;
+  height: 100%;
+}
+
+#console {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: var(--gap);
+}
+
+#output,
+#input-container {
+  padding: calc(var(--gap) / 2);
+  border: solid 2px var(--color-tertiary);
+  background-color: var(--color-editor-bg);
+}
+
+#output {
+  flex: 1;
+  overflow-y: auto;
+}
+
+#output .command {
+  padding-left: var(--input-padding);
+
+  &::before {
+    content: ">";
+    position: relative;
+    left: calc(-1 * var(--input-padding));
+  }
+}
+
+#output {
+  & > .success {
+    color: #16a34a;
+  }
+
+  & > .error {
+    color: #ef4444;
+  }
+
+  & > .log {
+    color: #818181;
+  }
+}
+
+#input-container form {
+  display: flex;
+  gap: var(--input-padding);
+  align-items: center;
+
+  input {
+    background-color: transparent;
+    color: var(--color-primary);
+    flex: 1;
+  }
+}
+
+/* formes */
+input,
+button {
+  border: none;
+  outline: none;
+}
+
+button {
+  padding: 4px 12px;
+  background-color: var(--color-primary);
+  color: var(--color-secondary);
+
+  &:hover {
+    background-color: #f1f1f1;
+  }
+}
