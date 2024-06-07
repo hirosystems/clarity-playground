@@ -8,11 +8,16 @@ html {
 }
 
 :root {
-  --color-primary: rgba(255, 255, 255, 0.88);
-  --color-secondary: #3e3e42;
-  --color-tertiary: #2d2d30;
-  --color-editor-bg: #1e1e1e;
-  --color-background: #111;
+  --color-gray-100: rgba(255, 255, 255, 0.88);
+  --color-gray-200: #f8f9fa;
+  --color-gray-400: #818181;
+  --color-gray-600: #2d2d30;
+  --color-gray-900: #0d0c0c;
+  --color-gray-950: #111;
+
+  --bg: #24272c;
+  --ansi-green: #98c379;
+  --ansi-red: #e06c75;
 
   --input-padding: 0.4rem;
 
@@ -30,8 +35,8 @@ html {
 
 body {
   font-family: monospace;
-  background-color: var(--color-background);
-  color: var(--color-primary);
+  background-color: var(--color-gray-950);
+  color: var(--color-gray-100);
   height: 100vh;
 }
 
@@ -61,8 +66,8 @@ header {
   position: relative;
   flex: 1;
   padding: calc(var(--gap) / 2) 0;
-  border: solid 2px var(--color-tertiary);
-  background-color: var(--color-editor-bg);
+  background-color: var(--color-gray-900);
+  border: solid 2px var(--color-gray-600);
 
   button {
     position: absolute;
@@ -87,8 +92,8 @@ header {
 #output,
 #input-container {
   padding: calc(var(--gap) / 2);
-  border: solid 2px var(--color-tertiary);
-  background-color: var(--color-editor-bg);
+  background-color: var(--color-gray-900);
+  border: solid 2px var(--color-gray-600);
 }
 
 #output {
@@ -108,15 +113,15 @@ header {
 
 #output {
   & > .success {
-    color: #16a34a;
+    color: var(--ansi-green);
   }
 
   & > .error {
-    color: #ef4444;
+    color: var(--ansi-red);
   }
 
   & > .log {
-    color: #818181;
+    color: var(--color-gray-400);
   }
 }
 
@@ -127,7 +132,7 @@ header {
 
   input {
     background-color: transparent;
-    color: var(--color-primary);
+    color: var(--color-gray-100);
     flex: 1;
   }
 }
@@ -141,10 +146,10 @@ button {
 
 button {
   padding: 4px 12px;
-  background-color: var(--color-primary);
-  color: var(--color-secondary);
+  background-color: var(--color-gray-100);
+  color: var(--color-gray-600);
 
   &:hover {
-    background-color: #f1f1f1;
+    background-color: var(--color-gray-200);
   }
 }

@@ -1,9 +1,9 @@
 import { initSimnet } from "https://esm.sh/@hirosystems/clarinet-sdk-browser@beta";
-import { Cl } from "https://esm.sh/@stacks/transactions@6.15.0";
-import * as monaco from "https://esm.sh/monaco-editor@0.49.0";
+import { Cl } from "https://esm.sh/@stacks/transactions@6.15";
 
-import "./monaco.js";
+import "./editor/monaco.js";
 import { counter } from "./samples/contract.js";
+import monaco from "./editor/monaco.js";
 
 let contractDeployed = 0;
 
@@ -32,10 +32,12 @@ let undeployed = true;
   // @ts-ignore
   simnet.mintSTX(transient, 1000000000n);
 
-  simnet.setEpoch("2.5");
-  const currentEpoch = simnet.currentEpoch;
+  simnet.setEpoch("3.0");
 
-  window.output.innerHTML = `simnet ready<br />current epoch: ${currentEpoch}`;
+  window.output.innerHTML = `simnet ready<br />current epoch: ${simnet.currentEpoch}`;
+
+  // deploy initial contract
+  deployContract(simnet, counter);
 
   // init monaco editor
   const editor = monaco.editor.create(window.editor, {
@@ -48,38 +50,16 @@ let undeployed = true;
     },
   });
 
-  function deployContract() {
-    if (!undeployed) {
-      appendOutput("contract already deployed", ["log"]);
-      return;
-    }
-    const content = editor.getValue();
-    console.log("Editor content:", content);
-
-    // console.log("simnet.deployer", simnet.deployer);
-    const { result } = simnet.deployContract(
-      `contract-${contractDeployed}`,
-      content,
-      null,
-      deployer
-    );
-
-    appendOutput(`contract deployed: contract-${contractDeployed}`, []);
-    appendOutput(Cl.prettyPrint(result), ["success"]);
-    contractDeployed++;
-    undeployed = false;
-  }
-
-  window.deploy.addEventListener("click", deployContract);
+  window.deploy.addEventListener("click", () =>
+    deployContract(simnet, editor.getValue())
+  );
 
   window.addEventListener("keydown", (e) => {
     if ((e.metaKey || e.ctrlKey) && e.code === "KeyS") {
       e.preventDefault();
-      deployContract();
+      deployContract(simnet, editor.getValue());
     }
   });
-
-  deployContract();
 
   editor.onDidChangeModelContent(() => {
     if (!undeployed) undeployed = true;
@@ -143,6 +123,9 @@ let undeployed = true;
 function executeCommand(simnet, command) {
   if (history[history.length - 1] !== command) {
     history.push(command);
+    if (history.length > 50) {
+      history.shift();
+    }
     localStorage.setItem("console-history", JSON.stringify(history));
     currentHistoryIndex++;
   }
@@ -151,7 +134,6 @@ function executeCommand(simnet, command) {
 
   try {
     let { result, events } = simnet.execute(command);
-    console.log("events", events);
     appendOutput(Cl.prettyPrint(result), ["success"]);
   } catch (e) {
     if (typeof e === "string") {
@@ -160,6 +142,38 @@ function executeCommand(simnet, command) {
       console.warn("error", e);
     }
   }
+}
+
+/**
+ * @param {import("@hirosystems/clarinet-sdk-browser").Simnet} simnet
+ * @param {string} content
+ * @returns
+ */
+function deployContract(simnet, content) {
+  if (!undeployed) {
+    appendOutput("contract already deployed", ["log"]);
+    return;
+  }
+
+  const contractName = `contract-${contractDeployed}`;
+
+  try {
+    const { result } = simnet.deployContract(
+      contractName,
+      content,
+      { clarityVersion: 3 },
+      deployer
+    );
+
+    appendOutput(`contract deployed: '${deployer}.${contractName}`, []);
+    appendOutput(Cl.prettyPrint(result), ["success"]);
+    contractDeployed++;
+  } catch (e) {
+    if (typeof e === "string") {
+      appendOutput(e, ["error"]);
+    }
+  }
+  undeployed = false;
 }
 
 /**
@@ -173,11 +187,9 @@ function appendOutput(text, classes = []) {
   }
   oututDiv.innerText = text;
   window.output.append(oututDiv);
+  window.output.scrollTop = window.output.scrollHeight;
 }
 
-/**
- *
- */
 function focusEndOfInput() {
   const input = window.input;
   const end = input.value.length;
