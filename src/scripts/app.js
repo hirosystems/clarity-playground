@@ -34,10 +34,20 @@ let undeployed = true;
 
   simnet.setEpoch("3.0");
 
-  window.output.innerHTML = `simnet ready<br />current epoch: ${simnet.currentEpoch}`;
+  window.output.innerHTML = "";
+  appendOutput("simnet ready", []);
+  appendOutput(`current epoch: ${simnet.currentEpoch}"`, ["log"]);
 
   // deploy initial contract
   deployContract(simnet, counter);
+
+  appendOutput("type any clarity code below to run it: ", []);
+  appendOutput("> (+ u41 u1)", ["log", "instructions"]);
+  appendOutput("including contract-calls: ", []);
+  appendOutput(
+    "> (contract-call? 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.contract-0 get-count)",
+    ["log", "instructions"]
+  );
 
   // init monaco editor
   const editor = monaco.editor.create(window.editor, {
@@ -165,7 +175,7 @@ function deployContract(simnet, content) {
       deployer
     );
 
-    appendOutput(`contract deployed: '${deployer}.${contractName}`, []);
+    appendOutput(`contract deployed: '${deployer}.${contractName}`, ["log"]);
     appendOutput(Cl.prettyPrint(result), ["success"]);
     contractDeployed++;
   } catch (e) {
