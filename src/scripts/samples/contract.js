@@ -9,7 +9,7 @@ export const counter = `\
 
 (define-public (increment)
   (begin
-    (try! (stx-transfer? (var-get cost) tx-sender (var-get contract-owner)))
+    (print u"incrementing count")
     (ok (var-set count (+ (var-get count) u1)))
   )
 )

@@ -7,15 +7,15 @@ import monaco from "./editor/monaco.js";
 
 let contractDeployed = 0;
 
-let transient = "ST000000000000000000002AMW42H";
 let deployer = "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM";
+let wallet_1 = "ST1SJ3DTE5DN7X54YDH5D64R3BCB6A2AG2ZQ8YPD5";
+let wallet_2 = "ST2CY5V39NHDPWSXMW9QDT3HC3GD6Q6XX4CFRK9AG";
+let wallet_3 = "ST2JHG361ZXG51QTKY2NQCVBPPRRE2KZB1HR05NNC";
 
 let storedHistory = localStorage.getItem("console-history");
 let parsdedHistory = storedHistory ? JSON.parse(storedHistory) : null;
 /** @type string[] */
-let history = parsdedHistory || [
-  "(contract-call? 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.contract-0 get-count)",
-];
+let history = parsdedHistory || ["(contract-call? .contract-0 get-count)"];
 let currentHistoryIndex = history.length;
 let isBrowsingHistory = false;
 
@@ -25,29 +25,32 @@ let undeployed = true;
   // init simnet
   const simnet = await initSimnet();
   await simnet.initEmtpySession();
-  console.log("simnet.accounts", simnet.getAccounts());
 
-  // @ts-ignore
-  simnet.mintSTX(deployer, 1000000000n);
-  // @ts-ignore
-  simnet.mintSTX(transient, 1000000000n);
+  [deployer, wallet_1, wallet_2, wallet_3].forEach((address) => {
+    // @ts-ignore
+    simnet.mintSTX(address, 1000000000n);
+  });
 
+  simnet.executeCommand(`::set_tx_sender ${deployer}`);
   simnet.setEpoch("3.0");
 
   window.output.innerHTML = "";
   appendOutput("simnet ready", []);
   appendOutput(`current epoch: ${simnet.currentEpoch}"`, ["log"]);
 
-  // deploy initial contract
-  deployContract(simnet, counter);
-
+  appendOutput("---", []);
+  appendOutput("Instructions: ", []);
   appendOutput("type any clarity code below to run it: ", []);
   appendOutput("> (+ u41 u1)", ["log", "instructions"]);
   appendOutput("including contract-calls: ", []);
-  appendOutput(
-    "> (contract-call? 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.contract-0 get-count)",
-    ["log", "instructions"]
-  );
+  appendOutput("> (contract-call? .contract-0 get-count)", [
+    "log",
+    "instructions",
+  ]);
+  appendOutput("---", []);
+
+  // deploy initial contract
+  deployContract(simnet, counter);
 
   // init monaco editor
   const editor = monaco.editor.create(window.editor, {
@@ -68,6 +71,11 @@ let undeployed = true;
     if ((e.metaKey || e.ctrlKey) && e.code === "KeyS") {
       e.preventDefault();
       deployContract(simnet, editor.getValue());
+    }
+
+    if ((e.metaKey || e.ctrlKey) && e.code === "KeyK") {
+      e.preventDefault();
+      window.output.innerHTML = "";
     }
   });
 
@@ -135,15 +143,22 @@ function executeCommand(simnet, command) {
     history.push(command);
     if (history.length > 50) {
       history.shift();
+    } else {
+      currentHistoryIndex++;
     }
     localStorage.setItem("console-history", JSON.stringify(history));
-    currentHistoryIndex++;
   }
 
   appendOutput(command, ["command"]);
 
   try {
+    if (command.startsWith("::")) {
+      const result = simnet.executeCommand(command);
+      appendOutput(result, ["log"]);
+      return;
+    }
     let { result, events } = simnet.execute(command);
+    console.log("events", events);
     appendOutput(Cl.prettyPrint(result), ["success"]);
   } catch (e) {
     if (typeof e === "string") {
@@ -171,11 +186,11 @@ function deployContract(simnet, content) {
     const { result } = simnet.deployContract(
       contractName,
       content,
-      { clarityVersion: 3 },
+      null,
       deployer
     );
 
-    appendOutput(`contract deployed: '${deployer}.${contractName}`, ["log"]);
+    appendOutput(`contract deployed: .${contractName}`, ["log"]);
     appendOutput(Cl.prettyPrint(result), ["success"]);
     contractDeployed++;
   } catch (e) {
@@ -191,12 +206,12 @@ function deployContract(simnet, content) {
  * @param {string[]} classes
  */
 function appendOutput(text, classes = []) {
-  let oututDiv = document.createElement("div");
+  let outputPre = document.createElement("pre");
   for (const className of classes) {
-    oututDiv.classList.add(className);
+    outputPre.classList.add(className);
   }
-  oututDiv.innerText = text;
-  window.output.append(oututDiv);
+  outputPre.append(text);
+  window.output.append(outputPre);
   window.output.scrollTop = window.output.scrollHeight;
 }
 
