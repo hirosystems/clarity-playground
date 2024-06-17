@@ -1,3 +1,8 @@
+@font-face {
+  font-family: "NectoMono Regular";
+  src: url("/fonts/NectoMono-Regular.woff2") format("woff2");
+}
+
 html {
   box-sizing: border-box;
 }
@@ -8,32 +13,53 @@ html {
 }
 
 :root {
+  --header-height: 4.2rem;
+  --footer-height: 3.2rem;
+  --gap: 0rem;
+  --input-padding: 0.4rem;
+  --padding: 1.5rem;
+  --outer-padding: 2.25rem;
+
+  --font-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol";
+  --font-monospace: "NectoMono Regular", monospace;
+
+  --anim-duration: 100ms;
+
   --color-gray-100: rgba(255, 255, 255, 0.88);
   --color-gray-200: #f8f9fa;
-  --color-gray-400: #818181;
   --color-gray-600: #2d2d30;
-  --color-gray-900: #0d0c0c;
-  --color-gray-950: #111;
 
-  --bg: #24272c;
+  --gray-100: #f7f8f9;
+  --gray-100: color(display-p3 0.9686 0.9725 0.9765);
+  --gray-200: #d9d9d9;
+  --gray-200: color(display-p3 0.851 0.851 0.851);
+  --gray-300: #7c858c;
+  --gray-300: color(display-p3 0.4941 0.5216 0.5451);
+  --gray-400: #44494c;
+  --gray-400: color(display-p3 0.2697 0.2838 0.2959);
+  --gray-900: #12171a;
+  --gray-900: color(display-p3 0.0745 0.0902 0.102);
+
+  --shadow-gray: rgba(217, 217, 217, 0.7);
+  --shadow-gray: color(display-p3 0.851 0.851 0.851 / 0.7);
+
+  --white: #fff;
+  --white: color(display-p3 1 1 1);
+
+  --mint: #d7f651;
+  --mint: color(display-p3 0.8667 0.9608 0.4275);
+  --shadow-mint: rgba(215, 246, 81, 0.6);
+  --shadow-mint: color(display-p3 0.8667 0.9608 0.4275 / 0.6);
+
   --ansi-green: #98c379;
   --ansi-red: #e06c75;
-
-  --input-padding: 0.4rem;
-
-  --gap: 0rem;
-  --header-height: 4rem;
 }
 
 @media (min-width: 768px) {
   :root {
     --gap: 1rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  :root {
-    --gap: 2rem;
   }
 }
 
@@ -46,76 +72,133 @@ html {
 }
 
 body {
-  font-family: monospace;
-  background-color: var(--color-gray-950);
-  color: var(--color-gray-100);
   height: 100vh;
+  background-color: var(--gray-900);
+
+  /* typography */
+  color: var(--white);
+  font-family: var(--font-monospace);
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.25rem; /* 142.857% */
 }
 
 /*  layout */
+/*
+  header
+  #container
+    #editorContainer
+    #console
+      #output
+      #inputContainer
+  footer
+*/
 
 header {
   height: var(--header-height);
-  padding: 0 var(--gap);
+  padding: 0 var(--outer-padding);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
   h1 {
-    line-height: var(--header-height);
-    margin: 0;
+    color: transparent;
+    font-size: 1px;
+    line-height: 0;
+  }
+
+  a {
+    margin-left: 1.8rem;
+    padding: 0.2rem 0;
+    color: var(--gray-200);
+    font-family: var(--font-sans-serif);
+    text-decoration: none;
+    border-bottom: solid 2px var(--gray-400);
+
+    transition: color var(--anim-duration) ease-in-out,
+      border-bottom-color var(--anim-duration) ease-in-out;
+
+    &:hover {
+      color: var(--gray-100);
+      border-bottom-color: var(--gray-300);
+    }
+  }
+}
+
+footer {
+  padding: 0 var(--outer-padding);
+  line-height: var(--footer-height);
+  color: var(--gray-300);
+  text-align: right;
+  font-family: var(--font-sans-serif);
+
+  a {
+    color: var(--gray-300);
+    transition: color var(--anim-duration) ease-in-out;
+
+    &:hover {
+      color: var(--white);
+    }
   }
 }
 
 #container {
   position: relative;
-  height: calc(100vh - var(--header-height));
+  height: calc(100vh - var(--header-height) - var(--footer-height));
   padding-top: 0;
 }
 
-#editor-container {
+#editorContainer,
+#output,
+#inputContainer {
+  border-radius: 4px;
+  border: 1px solid var(--gray-400);
+  transition: border-color var(--anim-duration) ease-in-out;
+}
+
+#inputContainer:has(input:focus),
+#editorContainer.focus {
+  border-color: var(--gray-300);
+}
+
+#editorContainer {
   position: absolute;
   top: 0;
-  bottom: var(--gap);
-  left: var(--gap);
+  bottom: 0;
+  left: var(--outer-padding);
   right: 50%;
-}
-
-#console {
-  position: absolute;
-  top: 0;
-  bottom: var(--gap);
-  left: 50%;
-  right: var(--gap);
-  padding-left: var(--gap);
-}
-
-#editor-container {
-  padding: calc(var(--gap) / 2) 0;
-  background-color: var(--color-gray-900);
-  border: solid 2px var(--color-gray-600);
+  padding: var(--padding) 0;
 
   button {
     position: absolute;
-    bottom: calc(var(--gap) / 2);
-    right: calc(var(--gap) / 2);
+    bottom: var(--padding);
+    right: var(--padding);
   }
 }
 
-/* console input / output */
-#editor {
-  height: 100%;
-}
-
 #console {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  right: var(--outer-padding);
+
   display: flex;
   flex-direction: column;
   flex: 1;
   gap: var(--gap);
+  padding-left: var(--gap);
+}
+
+#editor {
+  height: 100%;
 }
 
 #output,
-#input-container {
-  padding: calc(var(--gap) / 2);
-  background-color: var(--color-gray-900);
-  border: solid 2px var(--color-gray-600);
+#inputContainer {
+  padding: var(--padding);
 }
 
 #output {
@@ -147,7 +230,7 @@ header {
   }
 }
 
-#input-container form {
+#inputContainer form {
   display: flex;
   gap: var(--input-padding);
   align-items: center;
@@ -163,7 +246,7 @@ pre {
   white-space: pre-wrap;
 }
 
-/* formes */
+/* forms */
 input,
 button {
   border: none;
@@ -171,11 +254,29 @@ button {
 }
 
 button {
-  padding: 4px 12px;
-  background-color: var(--color-gray-100);
-  color: var(--color-gray-600);
+  padding: 0.625rem 1.5rem;
+  border-radius: 0.1875rem;
+  background-color: var(--gray-100);
+  color: var(--gray-900);
+  cursor: pointer;
+  box-shadow: 0px 0px 0px 0px var(--shadow-mint);
+}
+
+#editorContainer button {
+  background-color: var(--mint);
+  box-shadow: 0px 0px 0px 0px var(--shadow-mint);
+  transition: box-shadow var(--anim-duration) ease-in-out;
 
   &:hover {
-    background-color: var(--color-gray-200);
+    box-shadow: 0px 4px 24px 0px var(--shadow-mint);
+  }
+}
+
+#inputContainer button {
+  box-shadow: 0px 0px 0px 0px var(--shadow-gray);
+  transition: box-shadow var(--anim-duration) ease-in-out;
+
+  &:hover {
+    box-shadow: 0px 4px 24px 0px var(--shadow-gray);
   }
 }

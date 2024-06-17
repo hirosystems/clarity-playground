@@ -58,26 +58,23 @@ let undeployed = true;
     language: "clarity",
     automaticLayout: true,
     theme: "vs-dark",
+    tabFocusMode: false,
+    fontSize: 14,
     minimap: {
       enabled: false,
     },
   });
 
+  editor.onDidFocusEditorText(() => {
+    window.editorContainer.classList.add("focus");
+  });
+  editor.onDidBlurEditorText(() => {
+    window.editorContainer.classList.remove("focus");
+  });
+
   window.deploy.addEventListener("click", () =>
     deployContract(simnet, editor.getValue())
   );
-
-  window.addEventListener("keydown", (e) => {
-    if ((e.metaKey || e.ctrlKey) && e.code === "KeyS") {
-      e.preventDefault();
-      deployContract(simnet, editor.getValue());
-    }
-
-    if ((e.metaKey || e.ctrlKey) && e.code === "KeyK") {
-      e.preventDefault();
-      window.output.innerHTML = "";
-    }
-  });
 
   editor.onDidChangeModelContent(() => {
     if (!undeployed) undeployed = true;
@@ -131,6 +128,21 @@ let undeployed = true;
 
     isBrowsingHistory = false;
     currentHistoryIndex = history.length;
+  });
+
+  // global keydown event listener
+  window.addEventListener("keydown", (e) => {
+    // deploy contract on ctrl + s
+    if ((e.metaKey || e.ctrlKey) && e.code === "KeyS") {
+      e.preventDefault();
+      deployContract(simnet, editor.getValue());
+    }
+
+    // empty consolle on ctrl + k
+    if ((e.metaKey || e.ctrlKey) && e.code === "KeyK") {
+      e.preventDefault();
+      window.output.innerHTML = "";
+    }
   });
 })();
 

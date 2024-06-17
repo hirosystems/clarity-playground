@@ -1,5 +1,6 @@
 interface Window {
   editor: HTMLDivElement;
+  editorContainer: HTMLDivElement;
   output: HTMLDivElement;
   run: HTMLFormElement;
   input: HTMLInputElement;

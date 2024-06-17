@@ -11,7 +11,7 @@ export default {
     "diffEditor.insertedTextBackground": "#00809b33",
     "dropdown.background": "#1d1f23",
     "dropdown.border": "#181a1f",
-    "editor.background": "#0D0C0C",
+    "editor.background": "#12171a",
     "editor.findMatchBackground": "#42557b",
     "editor.findMatchHighlightBackground": "#314365",
     "editor.lineHighlightBackground": "#24272c",

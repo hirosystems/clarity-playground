@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Clarity Playground</title>
+    <title>clarity playground</title>
     <meta
       name="description"
       content="Run Clarity code in the browser Clarinet"
@@ -19,17 +19,31 @@
   </head>
   <body>
     <header>
-      <h1>Clarity Playground</h1>
+      <div>
+        <h1>clarity playground</h1>
+        <img src="./images/logo.svg" alt="Logo" width="193" height="25" />
+      </div>
+      <div>
+        <a
+          href="https://docs.stacks.co/clarity/overview"
+          target="_blank"
+          rel="noopener"
+          >Clarity Docs ↗</a
+        >
+        <a href="https://docs.hiro.so" target="_blank" rel="noopener"
+          >Hiro Docs ↗</a
+        >
+      </div>
     </header>
 
     <div id="container">
-      <div id="editor-container">
+      <div id="editorContainer">
         <div id="editor"></div>
         <button id="deploy">Deploy</button>
       </div>
       <div id="console">
         <div id="output">loading</div>
-        <div id="input-container">
+        <div id="inputContainer">
           <form id="run">
             <span>&gt;</span>
             <input
@@ -44,6 +58,10 @@
         </div>
       </div>
     </div>
+
+    <footer>
+      Clarity Playground is maintained by <a href="https://hiro.so">Hiro</a>
+    </footer>
 
     <script type="module" src="./src/scripts/app.js"></script>
   </body>
