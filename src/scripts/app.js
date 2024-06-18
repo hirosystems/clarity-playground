@@ -136,6 +136,18 @@ async function initMonacoEditor() {
     deployContract(editor.getValue())
   );
 
+  window.copyCode.addEventListener("click", () => {
+    navigator.clipboard.writeText(editor.getValue());
+    markedActionButtonAsClicked(window.copyCode);
+  });
+
+  window.copyLink.addEventListener("click", () => {
+    navigator.clipboard.writeText(
+      `${window.location.origin}/?snippet=${btoa(editor.getValue())}`
+    );
+    markedActionButtonAsClicked(window.copyLink);
+  });
+
   editor.onDidChangeModelContent(() => {
     if (editor.getValue().length === 0) {
       // if the editor is empty, disable the deploy button
@@ -233,6 +245,19 @@ function deployContract(content) {
 }
 
 /**
+ *
+ * @param {HTMLButtonElement} button
+ */
+function markedActionButtonAsClicked(button) {
+  button.classList.add("clicked");
+  button.setAttribute("disabled", "true");
+  window.setTimeout(() => {
+    button.classList.remove("clicked");
+    button.removeAttribute("disabled");
+  }, 600);
+}
+
+/**
  * @param {string} text
  * @param {string[]} classes
  */
@@ -282,6 +307,16 @@ function handleConsoleInput() {
 }
 
 async function loadInitialContract() {
+  if (window.location.search.includes("snippet=")) {
+    const params = new URLSearchParams(window.location.search);
+    const snippet = params.get("snippet");
+    if (snippet) {
+      localStorage.setItem("contract", atob(snippet));
+      window.location.search = "";
+      return atob(snippet);
+    }
+  }
+
   const contract = localStorage.getItem("contract");
   if (contract) return contract;
 

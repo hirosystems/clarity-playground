@@ -2,10 +2,14 @@ interface Window {
   editor: HTMLDivElement;
   editorContainer: HTMLDivElement;
   output: HTMLDivElement;
+
   run: HTMLFormElement;
-  runButton: HTMLButtonElement;
   input: HTMLInputElement;
+
   deploy: HTMLButtonElement;
+  runButton: HTMLButtonElement;
+  copyCode: HTMLButtonElement;
+  copyLink: HTMLButtonElement;
 }
 
 declare module "https://esm.sh/@hirosystems/clarinet-sdk-browser@beta" {

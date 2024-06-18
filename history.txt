@@ -3,3 +3,5 @@
 (define-data-var t uint u0)
 (var-set t u1)
 ::help
+::get-costs (+ 1 1)
+::get_costs (+ 1 1)
