@@ -54,4 +54,4 @@ monaco.languages.register({ id: "clarity" });
   await wireTmGrammars(monaco, registry, grammars);
 })();
 
-export default monaco;
+export { monaco };

@@ -1,9 +1,4 @@
-import { initSimnet } from "https://esm.sh/@hirosystems/clarinet-sdk-browser@beta";
 import { Cl } from "https://esm.sh/@stacks/transactions@6.15";
-
-import "./editor/monaco.js";
-import { counter } from "./samples/contract.js";
-import monaco from "./editor/monaco.js";
 
 let contractDeployed = 0;
 
@@ -19,11 +14,18 @@ let history = parsdedHistory || ["(contract-call? .contract-0 get-count)"];
 let currentHistoryIndex = history.length;
 let isBrowsingHistory = false;
 
-let undeployed = true;
+let deployed = false;
 
-(async function main() {
+/** @type {import("@hirosystems/clarinet-sdk-browser").Simnet | null} */
+let simnet = null;
+
+async function initClarinetSDK() {
+  const { initSimnet } = await import(
+    "https://esm.sh/@hirosystems/clarinet-sdk-browser@beta"
+  );
+
   // init simnet
-  const simnet = await initSimnet();
+  simnet = await initSimnet();
   await simnet.initEmtpySession();
 
   [deployer, wallet_1, wallet_2, wallet_3].forEach((address) => {
@@ -50,11 +52,69 @@ let undeployed = true;
   appendOutput("---", []);
 
   // deploy initial contract
-  deployContract(simnet, counter);
+  deployContract(await loadInitialContract());
+
+  // handle console input
+  window.input.removeAttribute("disabled");
+  window.input.addEventListener("input", handleConsoleInput);
+  window.input.addEventListener("change", handleConsoleInput);
+
+  window.run.addEventListener("submit", (e) => {
+    e.preventDefault();
+    let command = window.input.value;
+    if (!command) return;
+
+    executeCommand(command);
+    setConsoleInputValue("");
+  });
+
+  // handle console history browsing
+  window.input.addEventListener("keydown", (e) => {
+    if (!e.shiftKey && (e.code === "ArrowUp" || e.code === "ArrowDown")) {
+      let command = window.input.value;
+      if (command.length > 0 && !isBrowsingHistory) return false;
+      if (history.length === 0) return false;
+
+      isBrowsingHistory = true;
+      if (e.code === "ArrowUp") {
+        const index = currentHistoryIndex - 1;
+        if (index < 0) return false;
+
+        e.preventDefault();
+
+        currentHistoryIndex--;
+        setConsoleInputValue(history[index]);
+      } else if (e.code === "ArrowDown") {
+        const index = currentHistoryIndex + 1;
+        if (index > history.length) return false;
+
+        e.preventDefault();
+
+        currentHistoryIndex++;
+        if (index === history.length) {
+          setConsoleInputValue("");
+          isBrowsingHistory = false;
+          return false;
+        }
+        setConsoleInputValue(history[index]);
+      }
+
+      return false;
+    }
+
+    isBrowsingHistory = false;
+    currentHistoryIndex = history.length;
+  });
+}
+
+async function initMonacoEditor() {
+  const { monaco } = await import("./editor/monaco.js");
+
+  const initialContract = await loadInitialContract();
 
   // init monaco editor
   const editor = monaco.editor.create(window.editor, {
-    value: counter,
+    value: initialContract,
     language: "clarity",
     automaticLayout: true,
     theme: "vs-dark",
@@ -73,61 +133,16 @@ let undeployed = true;
   });
 
   window.deploy.addEventListener("click", () =>
-    deployContract(simnet, editor.getValue())
+    deployContract(editor.getValue())
   );
 
   editor.onDidChangeModelContent(() => {
-    if (!undeployed) undeployed = true;
-  });
-
-  // handle console input
-  window.run.addEventListener("submit", (e) => {
-    e.preventDefault();
-    let command = window.input.value;
-    if (!command) return;
-
-    executeCommand(simnet, command);
-    window.input.value = "";
-  });
-
-  // handle console history browsing
-  window.input.addEventListener("keydown", (e) => {
-    if (!e.shiftKey && (e.code === "ArrowUp" || e.code === "ArrowDown")) {
-      let command = window.input.value;
-      if (command.length > 0 && !isBrowsingHistory) return false;
-      if (history.length === 0) return false;
-
-      isBrowsingHistory = true;
-      if (e.code === "ArrowUp") {
-        const index = currentHistoryIndex - 1;
-        if (index < 0) return false;
-
-        e.preventDefault();
-
-        currentHistoryIndex--;
-        window.input.value = history[index];
-        focusEndOfInput();
-      } else if (e.code === "ArrowDown") {
-        const index = currentHistoryIndex + 1;
-        if (index > history.length) return false;
-
-        e.preventDefault();
-
-        currentHistoryIndex++;
-        if (index === history.length) {
-          window.input.value = "";
-          isBrowsingHistory = false;
-          return false;
-        }
-        window.input.value = history[index];
-        focusEndOfInput();
-      }
-
-      return false;
+    if (editor.getValue().length === 0) {
+      // if the editor is empty, disable the deploy button
+      setDeployedStatus(true);
+      return;
     }
-
-    isBrowsingHistory = false;
-    currentHistoryIndex = history.length;
+    setDeployedStatus(false);
   });
 
   // global keydown event listener
@@ -135,7 +150,7 @@ let undeployed = true;
     // deploy contract on ctrl + s
     if ((e.metaKey || e.ctrlKey) && e.code === "KeyS") {
       e.preventDefault();
-      deployContract(simnet, editor.getValue());
+      deployContract(editor.getValue());
     }
 
     // empty consolle on ctrl + k
@@ -144,13 +159,18 @@ let undeployed = true;
       window.output.innerHTML = "";
     }
   });
-})();
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  initClarinetSDK();
+  initMonacoEditor();
+});
 
 /**
- * @arg {import("@hirosystems/clarinet-sdk-browser").Simnet} simnet
  * @arg {string} command
  */
-function executeCommand(simnet, command) {
+function executeCommand(command) {
+  if (!simnet) return;
   if (history[history.length - 1] !== command) {
     history.push(command);
     if (history.length > 50) {
@@ -182,12 +202,11 @@ function executeCommand(simnet, command) {
 }
 
 /**
- * @param {import("@hirosystems/clarinet-sdk-browser").Simnet} simnet
  * @param {string} content
- * @returns
  */
-function deployContract(simnet, content) {
-  if (!undeployed) {
+function deployContract(content) {
+  if (!simnet) return;
+  if (deployed) {
     appendOutput("contract already deployed", ["log"]);
     return;
   }
@@ -210,7 +229,7 @@ function deployContract(simnet, content) {
       appendOutput(e, ["error"]);
     }
   }
-  undeployed = false;
+  setDeployedStatus(true);
 }
 
 /**
@@ -227,8 +246,45 @@ function appendOutput(text, classes = []) {
   window.output.scrollTop = window.output.scrollHeight;
 }
 
-function focusEndOfInput() {
+/**
+ * @param {boolean} newStatus
+ */
+function setDeployedStatus(newStatus) {
+  if (deployed === newStatus) return;
+  if (newStatus) {
+    deployed = true;
+    window.deploy.setAttribute("disabled", "true");
+  } else {
+    deployed = false;
+    window.deploy.removeAttribute("disabled");
+  }
+}
+
+/**
+ * @param {string} value
+ */
+function setConsoleInputValue(value) {
   const input = window.input;
+  input.value = value;
+  handleConsoleInput();
+  // move cursor to the end of the input
   const end = input.value.length;
   input.setSelectionRange(end, end);
+}
+
+/** */
+function handleConsoleInput() {
+  if (window.input.value.length === 0) {
+    window.runButton.setAttribute("disabled", "true");
+  } else {
+    window.runButton.removeAttribute("disabled");
+  }
+}
+
+async function loadInitialContract() {
+  const contract = localStorage.getItem("contract");
+  if (contract) return contract;
+
+  const { counter } = await import("./samples/contract.js");
+  return counter;
 }

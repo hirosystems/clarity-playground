@@ -1,0 +1,5 @@
+#V2
+(var-set t uint u1)
+(define-data-var t uint u0)
+(var-set t u1)
+::help

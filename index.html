@@ -3,12 +3,20 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>clarity playground</title>
+    <title>Clarity Playground</title>
     <meta
       name="description"
       content="Run Clarity code in the browser Clarinet"
     />
     <link rel="icon" href="./images/favicon.svg" />
+
+    <meta property="og:title" content="Clarity Playground" />
+    <meta
+      property="og:description"
+      content="Run Clarity code in the browser Clarinet"
+    />
+    <!-- <meta property="og:image" content="https://example.com/images/clarity-playground.png" /> -->
+    <!-- <meta property="og:url" content="https://example.com/clarity-playground" /> -->
 
     <link rel="stylesheet" href="./src/styles/reset.css" />
     <link rel="stylesheet" href="./src/styles/app.css" />
@@ -39,10 +47,82 @@
     <div id="container">
       <div id="editorContainer">
         <div id="editor"></div>
-        <button id="deploy">Deploy</button>
+        <button id="copyCode" class="action-button">
+          <svg
+            width="16"
+            height="16"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M13.5 2h-8a.5.5 0 0 0-.5.5V5H2.5a.5.5 0 0 0-.5.5v8a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5V11h2.5a.5.5 0 0 0 .5-.5v-8a.5.5 0 0 0-.5-.5ZM10 13H3V6h7v7Zm3-3h-2V5.5a.5.5 0 0 0-.5-.5H6V3h7v7Z"
+              fill="#D9D9D9"
+              style="fill: color(display-p3 0.851 0.851 0.851); fill-opacity: 1"
+            />
+          </svg>
+        </button>
+        <button id="shareCode" class="action-button">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g clip-path="url(#clip0_40_551)">
+              <path
+                d="M6 10L10 6"
+                stroke="#D9D9D9"
+                style="
+                  stroke: #d9d9d9;
+                  stroke: color(display-p3 0.851 0.851 0.851);
+                  stroke-opacity: 1;
+                "
+                stroke-width="1.2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M7 4.75688L8.87875 2.88188C9.44291 2.32683 10.2035 2.0172 10.9949 2.02043C11.7864 2.02365 12.5444 2.33946 13.104 2.89908C13.6637 3.4587 13.9795 4.21677 13.9827 5.00819C13.9859 5.7996 13.6763 6.56022 13.1213 7.12438L11.2425 9"
+                stroke="#D9D9D9"
+                style="
+                  stroke: #d9d9d9;
+                  stroke: color(display-p3 0.851 0.851 0.851);
+                  stroke-opacity: 1;
+                "
+                stroke-width="1.2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M4.75698 7L2.88198 8.87875C2.32694 9.44291 2.01731 10.2035 2.02053 10.9949C2.02376 11.7864 2.33957 12.5444 2.89919 13.104C3.4588 13.6637 4.21688 13.9795 5.00829 13.9827C5.7997 13.9859 6.56033 13.6763 7.12448 13.1213L9.00011 11.2425"
+                stroke="#D9D9D9"
+                style="
+                  stroke: #d9d9d9;
+                  stroke: color(display-p3 0.851 0.851 0.851);
+                  stroke-opacity: 1;
+                "
+                stroke-width="1.2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </g>
+            <defs>
+              <clipPath id="clip0_40_551">
+                <rect
+                  width="16"
+                  height="16"
+                  fill="white"
+                  style="fill: white; fill-opacity: 1"
+                />
+              </clipPath>
+            </defs>
+          </svg>
+        </button>
+        <button id="deploy" disabled>Deploy</button>
       </div>
       <div id="console">
-        <div id="output">loading</div>
+        <div id="output">loading simnet</div>
         <div id="inputContainer">
           <form id="run">
             <span>&gt;</span>
@@ -52,8 +132,16 @@
               autocomplete="off"
               placeholder="clarity command"
               spellcheck="false"
+              disabled
             />
-            <button type="submit">Run</button>
+            <button type="submit" id="runButton" disabled>
+              <svg width="10" height="12" fill="none">
+                <path
+                  d="M.848 1.51v8.98a.407.407 0 0 0 .619.34l7.341-4.489a.398.398 0 0 0 0-.682L1.467 1.17a.407.407 0 0 0-.62.341Z"
+                />
+              </svg>
+              Run
+            </button>
           </form>
         </div>
       </div>

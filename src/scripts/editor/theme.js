@@ -14,7 +14,7 @@ export default {
     "editor.background": "#12171a",
     "editor.findMatchBackground": "#42557b",
     "editor.findMatchHighlightBackground": "#314365",
-    "editor.lineHighlightBackground": "#24272c",
+    "editor.lineHighlightBackground": "#1d2429",
     "editor.selectionBackground": "#3e4451",
     "editorCursor.foreground": "#f8f8f0",
     "editorError.foreground": "#c24038",

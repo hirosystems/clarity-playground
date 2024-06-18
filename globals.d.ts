@@ -3,6 +3,7 @@ interface Window {
   editorContainer: HTMLDivElement;
   output: HTMLDivElement;
   run: HTMLFormElement;
+  runButton: HTMLButtonElement;
   input: HTMLInputElement;
   deploy: HTMLButtonElement;
 }
