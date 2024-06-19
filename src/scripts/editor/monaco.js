@@ -1,43 +1,23 @@
 /* @ts-ignore */
 import editorWorker from "https://esm.sh/monaco-editor@0.49/esm/vs/editor/editor.worker?worker";
-/* @ts-ignore */
-import jsonWorker from "https://esm.sh/monaco-editor@0.49/esm/vs/language/json/json.worker?worker";
-/* @ts-ignore */
-import cssWorker from "https://esm.sh/monaco-editor@0.49/esm/vs/language/css/css.worker?worker";
-/* @ts-ignore */
-import htmlWorker from "https://esm.sh/monaco-editor@0.49/esm/vs/language/html/html.worker?worker";
-/* @ts-ignore */
-import tsWorker from "https://esm.sh/monaco-editor@0.49/esm/vs/language/typescript/ts.worker?worker";
 
-import * as monaco from "https://esm.sh/monaco-editor@0.49";
-import { Registry } from "https://esm.sh/monaco-textmate@3";
-import { wireTmGrammars } from "https://esm.sh/monaco-editor-textmate@4";
-
-import { loadWASM } from "https://esm.sh/onigasm@2";
+import * as monaco from "monaco-editor";
+import { Registry } from "monaco-textmate";
+import { wireTmGrammars } from "monaco-editor-textmate";
+import { loadWASM } from "onigasm";
 
 import { claritySyntax } from "./clarity-syntax.js";
+import { configLanguage } from "./clarity-language.js";
 import theme from "./theme.js";
 
 self.MonacoEnvironment = {
-  getWorker(_, label) {
-    if (label === "json") {
-      return new jsonWorker();
-    }
-    if (label === "css" || label === "scss" || label === "less") {
-      return new cssWorker();
-    }
-    if (label === "html" || label === "handlebars" || label === "razor") {
-      return new htmlWorker();
-    }
-    if (label === "typescript" || label === "javascript") {
-      return new tsWorker();
-    }
+  getWorker(_, _label) {
     return new editorWorker();
   },
 };
 
 monaco.editor.defineTheme("vs-dark", theme);
-monaco.languages.register({ id: "clarity" });
+configLanguage(monaco);
 
 (async function initClaritySyntax() {
   await loadWASM("https://esm.sh/onigasm/lib/onigasm.wasm");

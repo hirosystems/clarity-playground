@@ -1,4 +1,4 @@
-import { Cl } from "https://esm.sh/@stacks/transactions@6.15";
+import { Cl } from "@stacks/transactions";
 
 let contractDeployed = 0;
 
@@ -20,9 +20,7 @@ let deployed = false;
 let simnet = null;
 
 async function initClarinetSDK() {
-  const { initSimnet } = await import(
-    "https://esm.sh/@hirosystems/clarinet-sdk-browser@beta"
-  );
+  const { initSimnet } = await import("@hirosystems/clarinet-sdk-browser");
 
   // init simnet
   simnet = await initSimnet();
@@ -34,14 +32,15 @@ async function initClarinetSDK() {
   });
 
   simnet.executeCommand(`::set_tx_sender ${deployer}`);
-  simnet.setEpoch("3.0");
+  simnet.setEpoch("2.4");
 
   window.output.innerHTML = "";
   appendOutput("simnet ready", []);
   appendOutput(`current epoch: ${simnet.currentEpoch}"`, ["log"]);
 
   appendOutput("---", []);
-  appendOutput("Instructions: ", []);
+  appendOutput("Instructions:", []);
+  appendOutput(" ", []);
   appendOutput("type any clarity code below to run it: ", []);
   appendOutput("> (+ u41 u1)", ["log", "instructions"]);
   appendOutput("including contract-calls: ", []);
@@ -49,6 +48,9 @@ async function initClarinetSDK() {
     "log",
     "instructions",
   ]);
+  appendOutput("type ::help to see the available commands: ", []);
+  appendOutput("> ::help", ["log", "instructions"]);
+  appendOutput(" ", []);
   appendOutput("---", []);
 
   // deploy initial contract

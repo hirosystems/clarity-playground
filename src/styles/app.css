@@ -223,7 +223,7 @@ footer {
     display: none;
     width: 1rem;
     height: 1rem;
-    background-image: url("/images/checked.svg");
+    background-image: url("/images/svgs/checked.svg");
   }
 
   /* tooltip designed in css */
@@ -285,7 +285,7 @@ footer {
   top: var(--padding);
 
   .icon {
-    background-image: url("/images/copy-code.svg");
+    background-image: url("/images/svgs/copy-code.svg");
   }
 
   &:before {
@@ -301,7 +301,7 @@ footer {
   top: calc(var(--padding) * 2 + 1rem);
 
   .icon {
-    background-image: url("/images/copy-link.svg");
+    background-image: url("/images/svgs/copy-link.svg");
   }
 
   &:before {
