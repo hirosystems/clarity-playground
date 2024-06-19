@@ -1,3 +1,4 @@
+import { init } from "@hirosystems/clarinet-sdk-browser";
 import { Cl } from "@stacks/transactions";
 
 let contractDeployed = 0;
@@ -19,7 +20,10 @@ let deployed = false;
 /** @type {import("@hirosystems/clarinet-sdk-browser").Simnet | null} */
 let simnet = null;
 
-async function initClarinetSDK() {
+/**
+ * @param {string} initialContract
+ */
+async function initClarinetSDK(initialContract) {
   const { initSimnet } = await import("@hirosystems/clarinet-sdk-browser");
 
   // init simnet
@@ -54,7 +58,7 @@ async function initClarinetSDK() {
   appendOutput("---", []);
 
   // deploy initial contract
-  deployContract(await loadInitialContract());
+  deployContract(initialContract);
 
   // handle console input
   window.input.removeAttribute("disabled");
@@ -109,10 +113,12 @@ async function initClarinetSDK() {
   });
 }
 
-async function initMonacoEditor() {
+/**
+ *
+ * @param {string} initialContract
+ */
+async function initMonacoEditor(initialContract) {
   const { monaco } = await import("./editor/monaco.js");
-
-  const initialContract = await loadInitialContract();
 
   // init monaco editor
   const editor = monaco.editor.create(window.editor, {
@@ -177,9 +183,10 @@ async function initMonacoEditor() {
   });
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  initClarinetSDK();
-  initMonacoEditor();
+document.addEventListener("DOMContentLoaded", async () => {
+  const initialContract = await loadInitialContract();
+  initClarinetSDK(initialContract);
+  initMonacoEditor(initialContract);
 });
 
 /**
@@ -310,6 +317,8 @@ function handleConsoleInput() {
   }
 }
 
+// should only be called once since it changes the url
+// could be memoized in the future to enforce it
 async function loadInitialContract() {
   if (window.location.search.includes("snippet=")) {
     const params = new URLSearchParams(window.location.search);
