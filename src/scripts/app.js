@@ -315,7 +315,7 @@ async function loadInitialContract() {
     const params = new URLSearchParams(window.location.search);
     const snippet = params.get("snippet");
     if (snippet) {
-      window.location.search = "";
+      window.history.replaceState({}, document.title, window.location.pathname);
       return atob(snippet);
     }
   }
