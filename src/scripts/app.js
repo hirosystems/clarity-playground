@@ -151,11 +151,13 @@ async function initMonacoEditor() {
   });
 
   editor.onDidChangeModelContent(() => {
+    let value = editor.getValue();
     if (editor.getValue().length === 0) {
       // if the editor is empty, disable the deploy button
       setDeployedStatus(true);
       return;
     }
+    localStorage.setItem("contract", value);
     setDeployedStatus(false);
   });
 
@@ -313,7 +315,6 @@ async function loadInitialContract() {
     const params = new URLSearchParams(window.location.search);
     const snippet = params.get("snippet");
     if (snippet) {
-      localStorage.setItem("contract", atob(snippet));
       window.location.search = "";
       return atob(snippet);
     }
