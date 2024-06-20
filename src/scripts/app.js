@@ -1,4 +1,3 @@
-import { init } from "@hirosystems/clarinet-sdk-browser";
 import { Cl } from "@stacks/transactions";
 
 let contractDeployed = 0;
@@ -140,9 +139,11 @@ async function initMonacoEditor(initialContract) {
     window.editorContainer.classList.remove("focus");
   });
 
-  window.deploy.addEventListener("click", () =>
-    deployContract(editor.getValue())
-  );
+  window.deploy.addEventListener("click", () => {
+    const content = editor.getValue();
+    analytics.track("deploy-contract", { contractLength: content.length });
+    deployContract(content);
+  });
 
   window.copyCode.addEventListener("click", () => {
     navigator.clipboard.writeText(editor.getValue());
@@ -194,8 +195,21 @@ document.addEventListener("DOMContentLoaded", async () => {
  */
 function executeCommand(command) {
   if (!simnet) return;
-  if (history[history.length - 1] !== command) {
-    history.push(command);
+
+  let trimmedCommand = command.trim();
+
+  let commandType = trimmedCommand.startsWith("::")
+    ? "command"
+    : "code-snippet";
+  let isContractCall =
+    commandType === "code-snippet" && trimmedCommand.includes("contract-call?");
+  analytics.track("run-command", {
+    commandType,
+    isContractCall,
+  });
+
+  if (history[history.length - 1] !== trimmedCommand) {
+    history.push(trimmedCommand);
     if (history.length > 50) {
       history.shift();
     } else {
@@ -204,15 +218,15 @@ function executeCommand(command) {
     localStorage.setItem("console-history", JSON.stringify(history));
   }
 
-  appendOutput(command, ["command"]);
+  appendOutput(trimmedCommand, ["command"]);
 
   try {
-    if (command.startsWith("::")) {
-      const result = simnet.executeCommand(command);
+    if (trimmedCommand.startsWith("::")) {
+      const result = simnet.executeCommand(trimmedCommand);
       appendOutput(result, ["log"]);
       return;
     }
-    let { result, events } = simnet.execute(command);
+    let { result, events } = simnet.execute(trimmedCommand);
     console.log("events", events);
     appendOutput(Cl.prettyPrint(result), ["success"]);
   } catch (e) {

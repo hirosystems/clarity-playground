@@ -11,7 +11,8 @@
   "devDependencies": {
     "@hirosystems/clarinet-sdk-browser": "2.7.0-beta11",
     "@stacks/transactions": "^6.15.0",
-    "monaco-editor": "^0.49.0",
+    "@types/segment-analytics": "^0.0.38",
+    "monaco-editor": "^0.50.0",
     "monaco-editor-textmate": "^4.0.0",
     "monaco-textmate": "^3.0.1",
     "onigasm": "^2.2.5",
