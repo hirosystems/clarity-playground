@@ -13,12 +13,12 @@ html {
 }
 
 :root {
-  --header-height: 4.2rem;
-  --footer-height: 3.2rem;
+  --header-height: 2.4rem;
+  --footer-height: 2.2rem;
   --gap: 0rem;
   --input-padding: 0.4rem;
   --padding: 0.5rem;
-  --outer-padding: 2.25rem;
+  --outer-padding: 0rem;
 
   --font-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
@@ -57,10 +57,14 @@ html {
   --ansi-red: #e06c75;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 800px) {
   :root {
+    --header-height: 4.2rem;
+    --footer-height: 3.2rem;
+
     --gap: 1rem;
     --padding: 1.5rem;
+    --outer-padding: 2.25rem;
   }
 }
 
@@ -111,6 +115,7 @@ header {
   }
 
   a {
+    display: none;
     margin-left: 1.8rem;
     padding: 0.2rem 0;
     color: var(--gray-200);
@@ -124,6 +129,12 @@ header {
     &:hover {
       color: var(--gray-100);
       border-bottom-color: var(--gray-300);
+    }
+  }
+
+  @media (min-width: 800px) {
+    a {
+      display: inline-block;
     }
   }
 }
@@ -393,8 +404,8 @@ pre {
 #copyLink {
   position: absolute;
   bottom: var(--padding);
-  right: 8.5rem;
-  width: 12rem;
+  right: 7.5rem;
+  width: 11rem;
 
   color: var(--gray-100);
   border: solid 1px var(--mint);
@@ -417,6 +428,12 @@ pre {
     width: 16px;
     height: 16px;
     background-image: url("/images/svgs/copy-link.svg");
+  }
+
+  @media screen and (min-width: 800px) {
+    & {
+      right: 8.5rem;
+    }
   }
 }
 
