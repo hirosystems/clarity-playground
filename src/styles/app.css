@@ -57,7 +57,7 @@ html {
   --ansi-red: #e06c75;
 }
 
-@media (min-width: 800px) {
+@media (min-width: 860px) {
   :root {
     --header-height: 4.2rem;
     --footer-height: 3.2rem;
@@ -71,13 +71,13 @@ html {
 body,
 html {
   margin: 0;
-  height: 100vh;
+  height: 100vmax;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  height: 100vh;
+  height: 100vmax;
   background-color: var(--gray-900);
 
   /* typography */
@@ -132,7 +132,7 @@ header {
     }
   }
 
-  @media (min-width: 800px) {
+  @media (min-width: 860px) {
     a {
       display: inline-block;
     }
@@ -198,7 +198,7 @@ footer {
   padding-left: var(--gap);
 }
 
-@media screen and (max-width: 800px) and (orientation: portrait) {
+@media screen and (max-width: 860px) {
   #editorContainer {
     position: absolute;
     top: 0;
@@ -261,6 +261,7 @@ footer {
     background-color: transparent;
     color: var(--color-gray-100);
     flex: 1;
+    font-size: 16px;
   }
 }
 
@@ -298,6 +299,7 @@ pre {
 }
 
 #copyLink {
+  display: none;
   position: absolute;
   bottom: var(--padding);
   right: 7.5rem;
@@ -326,7 +328,13 @@ pre {
     background-image: url("/images/svgs/copy-link.svg");
   }
 
-  @media screen and (min-width: 800px) {
+  @media screen and (min-width: 600px) {
+    & {
+      display: inline-flex;
+    }
+  }
+
+  @media screen and (min-width: 860px) {
     & {
       right: 8.5rem;
     }

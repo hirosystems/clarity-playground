@@ -141,14 +141,14 @@ async function initMonacoEditor(initialContract) {
     minimap: {
       enabled: false,
     },
-    ...(window.innerWidth <= 800 ? smallScreenOptions : normalScreenOptions),
+    ...(window.innerWidth <= 860 ? smallScreenOptions : normalScreenOptions),
   });
 
   window.addEventListener("resize", () => {
     const showLineNumber = editor.getOption(68).renderType === 1;
-    if (window.innerWidth <= 800 && showLineNumber) {
+    if (window.innerWidth <= 860 && showLineNumber) {
       editor.updateOptions(smallScreenOptions);
-    } else if (window.innerWidth > 800 && !showLineNumber) {
+    } else if (window.innerWidth > 860 && !showLineNumber) {
       editor.updateOptions(normalScreenOptions);
     }
   });
