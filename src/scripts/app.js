@@ -141,7 +141,7 @@ async function initMonacoEditor(initialContract) {
 
   window.deploy.addEventListener("click", () => {
     const content = editor.getValue();
-    analytics.track("deploy-contract", { contractLength: content.length });
+    // analytics.track("deploy-contract", { contractLength: content.length });
     deployContract(content);
   });
 
@@ -203,10 +203,10 @@ function executeCommand(command) {
     : "code-snippet";
   let isContractCall =
     commandType === "code-snippet" && trimmedCommand.includes("contract-call?");
-  analytics.track("run-command", {
-    commandType,
-    isContractCall,
-  });
+  // analytics.track("run-command", {
+  //   commandType,
+  //   isContractCall,
+  // });
 
   if (history[history.length - 1] !== trimmedCommand) {
     history.push(trimmedCommand);

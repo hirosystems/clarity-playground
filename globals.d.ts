@@ -10,6 +10,4 @@ interface Window {
   runButton: HTMLButtonElement;
   copyCode: HTMLButtonElement;
   copyLink: HTMLButtonElement;
-
-  analytics: SegmentAnalytics.AnalyticsJS;
 }

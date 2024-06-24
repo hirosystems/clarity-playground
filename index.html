@@ -10,6 +10,20 @@
     />
     <link rel="icon" href="/images/favicon.svg" />
 
+    <!-- Google tag (gtag.js) -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-D6SJVXJMFY"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-D6SJVXJMFY");
+    </script>
+
     <meta property="og:title" content="Clarity Playground" />
     <meta
       property="og:description"
@@ -24,8 +38,6 @@
       rel="stylesheet"
       href="https://esm.sh/monaco-editor@0.49.0/min/vs/editor/editor.main.css"
     />
-
-    <script src="./src/scripts/segment.js"></script>
   </head>
 
   <body>
