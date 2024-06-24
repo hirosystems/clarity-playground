@@ -279,7 +279,7 @@ function markedActionButtonAsClicked(button) {
   window.setTimeout(() => {
     button.classList.remove("clicked");
     button.removeAttribute("disabled");
-  }, 600);
+  }, 1000);
 }
 
 /**

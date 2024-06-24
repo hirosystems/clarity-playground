@@ -171,12 +171,6 @@ footer {
   left: var(--outer-padding);
   right: 50%;
   padding: var(--padding) 0;
-
-  #deploy {
-    position: absolute;
-    bottom: var(--padding);
-    right: var(--padding);
-  }
 }
 
 .action-button {
@@ -219,13 +213,6 @@ footer {
     height: 1rem;
   }
 
-  .checked-icon {
-    display: none;
-    width: 1rem;
-    height: 1rem;
-    background-image: url("/images/svgs/checked.svg");
-  }
-
   /* tooltip designed in css */
   &::before,
   &::after {
@@ -266,18 +253,27 @@ footer {
     background-color: var(--mint);
     border-color: var(--mint);
 
-    .checked-icon {
-      display: inline;
-    }
-
-    .icon {
-      display: none;
-    }
-
     &::before,
     &::after {
       display: inline-flex;
     }
+  }
+}
+
+.checked-icon {
+  display: none;
+  width: 1rem;
+  height: 1rem;
+  background-image: url("/images/svgs/checked.svg");
+}
+
+button.clicked {
+  .checked-icon {
+    display: inline;
+  }
+
+  .icon {
+    display: none;
   }
 }
 
@@ -290,22 +286,6 @@ footer {
 
   &:before {
     content: "Copy code";
-  }
-
-  &.clicked::before {
-    content: "Copied!";
-  }
-}
-
-#copyLink {
-  top: calc(var(--padding) * 2 + 1rem);
-
-  .icon {
-    background-image: url("/images/svgs/copy-link.svg");
-  }
-
-  &:before {
-    content: "Copy link to contract";
   }
 
   &.clicked::before {
@@ -381,15 +361,24 @@ pre {
   white-space: pre-wrap;
 }
 
-/* forms */
+#copyLink,
 #deploy,
 #runButton {
   --text-color: var(--gray-900);
+
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.4rem;
+
+  height: 2.25rem;
   padding: 0.625rem 1.5rem;
   border-radius: 0.1875rem;
   background-color: var(--gray-100);
-  color: var(--text-color);
   box-shadow: 0px 0px 0px 0px var(--shadow-mint);
+
+  color: var(--text-color);
+  font-size: 0.875rem;
 
   &:enabled {
     cursor: pointer;
@@ -401,8 +390,45 @@ pre {
   }
 }
 
+#copyLink {
+  position: absolute;
+  bottom: var(--padding);
+  right: 8.5rem;
+  width: 12rem;
+
+  color: var(--gray-100);
+  border: solid 1px var(--mint);
+  background-color: var(--gray-900);
+
+  &::after {
+    content: "Share code";
+  }
+
+  &.clicked::after {
+    content: "Link Copied!";
+  }
+
+  &.clicked {
+    color: var(--gray-900);
+    background-color: var(--mint) !important;
+  }
+
+  .icon {
+    width: 16px;
+    height: 16px;
+    background-image: url("/images/svgs/copy-link.svg");
+  }
+}
+
 #deploy {
+  position: absolute;
+  bottom: var(--padding);
+  right: var(--padding);
   background-color: var(--mint);
+}
+
+#copyLink,
+#deploy {
   box-shadow: 0px 0px 0px 0px var(--shadow-mint);
   transition: box-shadow var(--anim-duration) ease-in-out;
 
