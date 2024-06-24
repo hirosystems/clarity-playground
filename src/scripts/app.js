@@ -119,6 +119,17 @@ async function initClarinetSDK(initialContract) {
 async function initMonacoEditor(initialContract) {
   const { monaco } = await import("./editor/monaco.js");
 
+  const smallScreenOptions = Object.freeze({
+    lineNumbers: "off",
+    glyphMargin: false,
+    folding: false,
+  });
+  const normalScreenOptions = Object.freeze({
+    lineNumbers: "on",
+    glyphMargin: true,
+    folding: true,
+  });
+
   // init monaco editor
   const editor = monaco.editor.create(window.editor, {
     value: initialContract,
@@ -130,6 +141,16 @@ async function initMonacoEditor(initialContract) {
     minimap: {
       enabled: false,
     },
+    ...(window.innerWidth <= 800 ? smallScreenOptions : normalScreenOptions),
+  });
+
+  window.addEventListener("resize", () => {
+    const showLineNumber = editor.getOption(68).renderType === 1;
+    if (window.innerWidth <= 800 && showLineNumber) {
+      editor.updateOptions(smallScreenOptions);
+    } else if (window.innerWidth > 800 && !showLineNumber) {
+      editor.updateOptions(normalScreenOptions);
+    }
   });
 
   editor.onDidFocusEditorText(() => {

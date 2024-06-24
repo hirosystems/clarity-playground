@@ -184,126 +184,6 @@ footer {
   padding: var(--padding) 0;
 }
 
-.action-button {
-  position: absolute;
-  right: 1.75rem;
-  width: 2rem;
-  height: 2rem;
-  padding: 0;
-  display: flex;
-  /* center icons */
-  justify-content: center;
-  align-items: center;
-  flex-shrink: 0;
-  border-radius: 0.375rem;
-  border: 2px solid var(--gray-400);
-
-  font-family: var(--font-sans-serif);
-  font-size: 0.75rem;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 1rem;
-  letter-spacing: -0.0075rem;
-  color: var(--gray-900);
-
-  background-color: var(--gray-900);
-  cursor: pointer;
-  z-index: 5;
-
-  transition: background-color var(--anim-duration) ease-in-out,
-    border var(--anim-duration) ease-in-out;
-
-  &[disabled] {
-    cursor: default;
-    color: var(--gray-900);
-  }
-
-  .icon {
-    display: inline;
-    width: 1rem;
-    height: 1rem;
-  }
-
-  /* tooltip designed in css */
-  &::before,
-  &::after {
-    content: "";
-    display: none;
-    position: absolute;
-    background-color: var(--gray-200);
-  }
-  &::before {
-    right: 40px;
-    align-items: flex-end;
-    padding: 0.5rem 0.6rem;
-    border-radius: 0.25rem;
-    word-wrap: none;
-    text-wrap: none;
-    overflow-wrap: none;
-    white-space: nowrap;
-    z-index: 6;
-  }
-  &:after {
-    width: 1rem;
-    height: 1rem;
-    border-radius: 2px;
-    transform: rotate(45deg) skew(-12deg, -12deg);
-    right: 38px;
-  }
-
-  &:hover {
-    background-color: var(--gray-400);
-
-    &::before,
-    &::after {
-      display: inline-flex;
-    }
-  }
-
-  &.clicked {
-    background-color: var(--mint);
-    border-color: var(--mint);
-
-    &::before,
-    &::after {
-      display: inline-flex;
-    }
-  }
-}
-
-.checked-icon {
-  display: none;
-  width: 1rem;
-  height: 1rem;
-  background-image: url("/images/svgs/checked.svg");
-}
-
-button.clicked {
-  .checked-icon {
-    display: inline;
-  }
-
-  .icon {
-    display: none;
-  }
-}
-
-#copyCode {
-  top: var(--padding);
-
-  .icon {
-    background-image: url("/images/svgs/copy-code.svg");
-  }
-
-  &:before {
-    content: "Copy code";
-  }
-
-  &.clicked::before {
-    content: "Copied!";
-  }
-}
-
 #console {
   position: absolute;
   top: 0;
@@ -316,6 +196,22 @@ button.clicked {
   flex: 1;
   gap: var(--gap);
   padding-left: var(--gap);
+}
+
+@media screen and (max-width: 800px) and (orientation: portrait) {
+  #editorContainer {
+    position: absolute;
+    top: 0;
+    bottom: 50%;
+    left: 0;
+    right: 0;
+  }
+  #console {
+    position: absolute;
+    top: calc(50% + 4px);
+    left: 0;
+    right: 0;
+  }
 }
 
 #editor {
@@ -473,5 +369,125 @@ pre {
   &:focus,
   &:enabled:hover {
     box-shadow: 0px 4px 24px 0px var(--shadow-gray);
+  }
+}
+
+.action-button {
+  position: absolute;
+  right: 1.75rem;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  display: flex;
+  /* center icons */
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  border-radius: 0.375rem;
+  border: 2px solid var(--gray-400);
+
+  font-family: var(--font-sans-serif);
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1rem;
+  letter-spacing: -0.0075rem;
+  color: var(--gray-900);
+
+  background-color: var(--gray-900);
+  cursor: pointer;
+  z-index: 5;
+
+  transition: background-color var(--anim-duration) ease-in-out,
+    border var(--anim-duration) ease-in-out;
+
+  &[disabled] {
+    cursor: default;
+    color: var(--gray-900);
+  }
+
+  .icon {
+    display: inline;
+    width: 1rem;
+    height: 1rem;
+  }
+
+  /* tooltip designed in css */
+  &::before,
+  &::after {
+    content: "";
+    display: none;
+    position: absolute;
+    background-color: var(--gray-200);
+  }
+  &::before {
+    right: 40px;
+    align-items: flex-end;
+    padding: 0.5rem 0.6rem;
+    border-radius: 0.25rem;
+    word-wrap: none;
+    text-wrap: none;
+    overflow-wrap: none;
+    white-space: nowrap;
+    z-index: 6;
+  }
+  &:after {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 2px;
+    transform: rotate(45deg) skew(-12deg, -12deg);
+    right: 38px;
+  }
+
+  &:hover {
+    background-color: var(--gray-400);
+
+    &::before,
+    &::after {
+      display: inline-flex;
+    }
+  }
+
+  &.clicked {
+    background-color: var(--mint);
+    border-color: var(--mint);
+
+    &::before,
+    &::after {
+      display: inline-flex;
+    }
+  }
+}
+
+.checked-icon {
+  display: none;
+  width: 1rem;
+  height: 1rem;
+  background-image: url("/images/svgs/checked.svg");
+}
+
+button.clicked {
+  .checked-icon {
+    display: inline;
+  }
+
+  .icon {
+    display: none;
+  }
+}
+
+#copyCode {
+  top: var(--padding);
+
+  .icon {
+    background-image: url("/images/svgs/copy-code.svg");
+  }
+
+  &:before {
+    content: "Copy code";
+  }
+
+  &.clicked::before {
+    content: "Copied!";
   }
 }
