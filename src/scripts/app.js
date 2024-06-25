@@ -23,7 +23,7 @@ let simnet = null;
  * @param {string} initialContract
  */
 async function initClarinetSDK(initialContract) {
-  const { initSimnet } = await import("@hirosystems/clarinet-sdk-browser");
+  const { initSimnet, SDK } = await import("@hirosystems/clarinet-sdk-browser");
 
   // init simnet
   simnet = await initSimnet();
@@ -35,11 +35,14 @@ async function initClarinetSDK(initialContract) {
   });
 
   simnet.executeCommand(`::set_tx_sender ${deployer}`);
-  simnet.setEpoch("2.4");
+  let defaultEpoch = SDK.getDefaultEpoch();
+  // the EpochString type isn't exported atm
+  // @ts-ignore
+  simnet.setEpoch(getInitialEpoch() || defaultEpoch);
 
   window.output.innerHTML = "";
   appendOutput("simnet ready", []);
-  appendOutput(`current epoch: ${simnet.currentEpoch}"`, ["log"]);
+  appendOutput(`current epoch: ${simnet.currentEpoch}`, ["log"]);
 
   appendOutput("---", []);
   appendOutput("Instructions:", []);
@@ -173,7 +176,9 @@ async function initMonacoEditor(initialContract) {
 
   window.copyLink.addEventListener("click", () => {
     navigator.clipboard.writeText(
-      `${window.location.origin}/?snippet=${btoa(editor.getValue())}`
+      `${window.location.origin}/?epoch=${simnet?.currentEpoch}&snippet=${btoa(
+        editor.getValue()
+      )}`
     );
     markedActionButtonAsClicked(window.copyLink);
   });
@@ -206,7 +211,7 @@ async function initMonacoEditor(initialContract) {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
-  const initialContract = await loadInitialContract();
+  const initialContract = await getInitialContract();
   initClarinetSDK(initialContract);
   initMonacoEditor(initialContract);
 });
@@ -270,12 +275,15 @@ function deployContract(content) {
   }
 
   const contractName = `contract-${contractDeployed}`;
+  const clarityVersionString = simnet.getDefaultClarityVersionForCurrentEpoch();
+  const clarityVersion = parseInt(clarityVersionString.replace("Clarity ", ""));
 
   try {
     const { result } = simnet.deployContract(
       contractName,
       content,
-      null,
+      // @ts-ignore
+      { clarityVersion },
       deployer
     );
 
@@ -352,14 +360,13 @@ function handleConsoleInput() {
   }
 }
 
-// should only be called once since it changes the url
+// should only be called once
 // could be memoized in the future to enforce it
-async function loadInitialContract() {
+async function getInitialContract() {
   if (window.location.search.includes("snippet=")) {
     const params = new URLSearchParams(window.location.search);
     const snippet = params.get("snippet");
     if (snippet) {
-      window.history.replaceState({}, document.title, window.location.pathname);
       return atob(snippet);
     }
   }
@@ -369,4 +376,12 @@ async function loadInitialContract() {
 
   const { counter } = await import("./samples/contract.js");
   return counter;
+}
+
+const validEpochs = ["2.0", "2.05", "2.1", "2.2", "2.3", "2.4", "2.5", "3.0"];
+function getInitialEpoch() {
+  const params = new URLSearchParams(window.location.search);
+  const epoch = params.get("epoch");
+  if (epoch && validEpochs.includes(epoch)) return epoch;
+  return null;
 }
