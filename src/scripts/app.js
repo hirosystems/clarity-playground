@@ -254,7 +254,7 @@ function executeCommand(command) {
     }
     let { result, events } = simnet.execute(trimmedCommand);
     console.log("events", events);
-    appendOutput(Cl.prettyPrint(result), ["success"]);
+    appendOutput(Cl.prettyPrint(result, 2), ["success"]);
   } catch (e) {
     if (typeof e === "string") {
       appendOutput(e, ["error"]);
@@ -288,7 +288,7 @@ function deployContract(content) {
     );
 
     appendOutput(`contract deployed: .${contractName}`, ["log"]);
-    appendOutput(Cl.prettyPrint(result), ["success"]);
+    appendOutput(Cl.prettyPrint(result, 2), ["success"]);
     contractDeployed++;
   } catch (e) {
     if (typeof e === "string") {
