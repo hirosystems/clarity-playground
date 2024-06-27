@@ -71,13 +71,13 @@ html {
 body,
 html {
   margin: 0;
-  height: 100vmax;
+  height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  height: 100vmax;
+  height: 100vh;
   background-color: var(--gray-900);
 
   /* typography */
