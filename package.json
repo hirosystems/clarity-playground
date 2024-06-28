@@ -1,13 +1,14 @@
 {
-  "name": "onlinerepl",
+  "name": "clarity-playground",
   "version": "1.0.0",
-  "description": "A simple online REPL for Clarity",
+  "description": "Online playground for Clarity",
+  "private": true,
   "scripts": {
     "start": "serve"
   },
   "keywords": [],
   "author": "",
-  "license": "MIT",
+  "license": "GPL-3.0",
   "devDependencies": {
     "@hirosystems/clarinet-sdk-browser": "2.7.0-beta16",
     "@stacks/transactions": "^6.15.0",
