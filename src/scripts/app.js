@@ -19,6 +19,14 @@ let deployed = false;
 /** @type {import("@hirosystems/clarinet-sdk-browser").Simnet | null} */
 let simnet = null;
 
+let initialSearchString = window.location.search;
+
+document.addEventListener("DOMContentLoaded", async () => {
+  const initialContract = await getInitialContract();
+  initClarinetSDK(initialContract);
+  initMonacoEditor(initialContract);
+});
+
 /**
  * @param {string} initialContract
  */
@@ -120,7 +128,7 @@ async function initClarinetSDK(initialContract) {
  * @param {string} initialContract
  */
 async function initMonacoEditor(initialContract) {
-  const { monaco } = await import("./editor/monaco.js");
+  const { monaco } = await import("./monaco/monaco.js");
 
   const smallScreenOptions = Object.freeze({
     lineNumbers: "off",
@@ -209,12 +217,6 @@ async function initMonacoEditor(initialContract) {
     }
   });
 }
-
-document.addEventListener("DOMContentLoaded", async () => {
-  const initialContract = await getInitialContract();
-  initClarinetSDK(initialContract);
-  initMonacoEditor(initialContract);
-});
 
 /**
  * @arg {string} command
