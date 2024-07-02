@@ -1,3 +1,4 @@
+import { decodeAndDecompress } from "./base64.js";
 import { initMonacoEditor } from "./editor.js";
 import { initClarinetSDK } from "./simnet.js";
 
@@ -21,7 +22,7 @@ async function getInitialContract() {
     const params = new URLSearchParams(initialSearchString);
     const snippet = params.get("snippet");
     if (snippet) {
-      return atob(snippet);
+      return decodeAndDecompress(snippet);
     }
   }
 
