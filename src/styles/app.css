@@ -230,11 +230,17 @@ footer {
 
 #output .command {
   padding-left: var(--input-padding);
+  transition: background-color var(--anim-duration) ease-in-out;
 
   &::before {
     content: ">";
     position: relative;
     left: calc(-1 * var(--input-padding));
+  }
+
+  &:hover {
+    background-color: var(--gray-400);
+    cursor: copy;
   }
 }
 

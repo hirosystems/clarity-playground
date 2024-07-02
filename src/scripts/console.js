@@ -48,6 +48,14 @@ export function setUpConsoleEventsListeners() {
     isBrowsingHistory = false;
     currentHistoryIndex = history.length;
   });
+
+  window.output.addEventListener("click", (e) => {
+    if (!e.target || !(e.target instanceof HTMLPreElement)) return;
+    if (e.target.classList.contains("command")) {
+      setCommandInputValue(e.target.innerText);
+      window.input.focus();
+    }
+  });
 }
 
 /**
@@ -58,15 +66,12 @@ export function showStartMessage(currentEpoch) {
   appendOutput(`current epoch: ${currentEpoch}`, ["log"]);
 
   appendOutput("---", []);
-  appendOutput("type any clarity code below to run it: ", []);
-  appendOutput("> (+ u41 u1)", ["log", "instructions"]);
-  appendOutput("including contract-calls: ", []);
-  appendOutput("> (contract-call? .contract-0 get-count)", [
-    "log",
-    "instructions",
-  ]);
-  appendOutput("type ::help to see the available commands: ", []);
-  appendOutput("> ::help", ["log", "instructions"]);
+  appendOutput("type any clarity code below to run it: ", ["log"]);
+  appendOutput("(+ u41 u1)", ["command"]);
+  appendOutput("including contract-calls: ", ["log"]);
+  appendOutput("(contract-call? .contract-0 get-count)", ["command"]);
+  appendOutput("type ::help to see the available commands: ", ["log"]);
+  appendOutput("::help", ["command"]);
   appendOutput("---", []);
 }
 
@@ -101,7 +106,6 @@ export function executeCommand(simnet, command) {
   try {
     if (trimmedCommand.startsWith("::")) {
       const result = simnet.executeCommand(trimmedCommand);
-      console.log("result", result);
       if (
         trimmedCommand.startsWith("::set_epoch") &&
         result.startsWith("Epoch updated to")
