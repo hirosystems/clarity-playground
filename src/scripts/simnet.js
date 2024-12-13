@@ -29,7 +29,7 @@ export async function initClarinetSDK(initialContract, initialEpoch) {
 
   // init simnet
   simnet = await initSimnet();
-  await simnet.initEmtpySession();
+  await simnet.initEmptySession();
 
   [deployer, wallet_1, wallet_2, wallet_3].forEach((address) => {
     // @ts-ignore
