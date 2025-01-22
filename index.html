@@ -1,112 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Clarity Playground</title>
-    <meta
-      name="description"
-      content="Run and test Clarity smart contracts in the browser with Clarinet"
-    />
-    <link rel="icon" href="/images/favicon.svg" />
 
-    <!-- Google tag (gtag.js) -->
-    <script
-      async
-      src="https://www.googletagmanager.com/gtag/js?id=G-D6SJVXJMFY"
-    ></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag("js", new Date());
-      gtag("config", "G-D6SJVXJMFY");
-    </script>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clarity Playground</title>
+  <meta name="description" content="Run and test Clarity smart contracts in the browser with Clarinet" />
+  <link rel="icon" href="/images/favicon.svg" />
 
-    <meta property="og:title" content="Clarity Playground" />
-    <meta
-      property="og:description"
-      content="Run and test Clarity smart contracts in the browser with Clarinet"
-    />
-    <meta property="og:image" content="https://play.hiro.so/images/og-cp.jpg" />
-    <meta property="og:url" content="https://play.hiro.so" />
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-D6SJVXJMFY"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "G-D6SJVXJMFY");
+  </script>
 
-    <link rel="stylesheet" href="./src/styles/reset.css" />
-    <link rel="stylesheet" href="./src/styles/app.css" />
-    <link
-      rel="stylesheet"
-      href="https://esm.sh/monaco-editor@0.49.0/min/vs/editor/editor.main.css"
-    />
-  </head>
+  <meta property="og:title" content="Clarity Playground" />
+  <meta property="og:description" content="Run and test Clarity smart contracts in the browser with Clarinet" />
+  <meta property="og:image" content="https://play.hiro.so/images/og-cp.jpg" />
+  <meta property="og:url" content="https://play.hiro.so" />
 
-  <body>
-    <header>
-      <div>
-        <h1>clarity playground</h1>
-        <img src="./images/svgs/logo.svg" alt="Logo" width="193" height="25" />
-      </div>
-      <div>
-        <a
-          href="https://docs.stacks.co/clarity/overview"
-          target="_blank"
-          rel="noopener"
-          >Clarity Docs ↗</a
-        >
-        <a href="https://docs.hiro.so" target="_blank" rel="noopener"
-          >Hiro Docs ↗</a
-        >
-      </div>
-    </header>
+  <link rel="stylesheet" href="./src/styles/reset.css" />
+  <link rel="stylesheet" href="./src/styles/app.css" />
+  <link rel="stylesheet" href="https://esm.sh/monaco-editor@0.49.0/min/vs/editor/editor.main.css" />
+</head>
 
-    <div id="container">
-      <div id="editorContainer">
-        <div id="editor"></div>
-        <button id="copyCode" class="action-button">
-          <span class="icon"></span>
-          <span class="checked-icon"></span>
-        </button>
+<body>
+  <header>
+    <div>
+      <h1>clarity playground</h1>
+      <img src="./images/svgs/logo.svg" alt="Logo" width="193" height="25" />
+    </div>
+    <div>
+      <a href="https://docs.stacks.co/clarity/overview" target="_blank" rel="noopener">Clarity Docs ↗</a>
+      <a href="https://docs.hiro.so" target="_blank" rel="noopener">Hiro Docs ↗</a>
+    </div>
+  </header>
 
-        <button id="copyLink">
-          <span class="icon"></span>
-          <span class="checked-icon"></span>
-        </button>
-        <button id="deploy" disabled>Deploy</button>
-      </div>
-      <div id="console">
-        <div id="output">loading simnet</div>
-        <div id="inputContainer">
-          <form id="run">
-            <span>&gt;</span>
-            <input
-              id="input"
-              type="text"
-              autocomplete="off"
-              placeholder="clarity command"
-              spellcheck="false"
-              disabled
-            />
-            <button type="submit" id="runButton" disabled>
-              <svg width="10" height="12" fill="none">
-                <path
-                  d="M.848 1.51v8.98a.407.407 0 0 0 .619.34l7.341-4.489a.398.398 0 0 0 0-.682L1.467 1.17a.407.407 0 0 0-.62.341Z"
-                />
-              </svg>
-              Run
-            </button>
-          </form>
-        </div>
+  <div id="container">
+    <div id="editorContainer">
+      <div id="editor"></div>
+      <button id="copyCode" class="action-button">
+        <span class="icon"></span>
+        <span class="checked-icon"></span>
+      </button>
+
+      <button id="copyLink">
+        <span class="icon"></span>
+        <span class="checked-icon"></span>
+      </button>
+      <button id="deploy" disabled>Deploy</button>
+    </div>
+    <div id="console">
+      <div id="output">loading simnet</div>
+      <div id="inputContainer">
+        <form id="run">
+          <span>&gt;</span>
+          <input id="input" type="text" autocomplete="off" placeholder="clarity command" spellcheck="false" disabled />
+          <button type="submit" id="runButton" disabled>
+            <svg width="10" height="12" fill="none">
+              <path
+                d="M.848 1.51v8.98a.407.407 0 0 0 .619.34l7.341-4.489a.398.398 0 0 0 0-.682L1.467 1.17a.407.407 0 0 0-.62.341Z" />
+            </svg>
+            Run
+          </button>
+        </form>
       </div>
     </div>
+  </div>
 
-    <footer>
-      Clarity Playground is maintained by <a href="https://hiro.so">Hiro</a>
-    </footer>
+  <footer>
+    Clarity Playground is maintained by <a href="https://hiro.so">Hiro</a>
+  </footer>
 
-    <script type="importmap">
+  <script type="importmap">
       {
         "imports": {
-          "@hirosystems/clarinet-sdk-browser": "https://esm.sh/@hirosystems/clarinet-sdk-browser@beta",
+          "@hirosystems/clarinet-sdk-browser": "https://esm.sh/@hirosystems/clarinet-sdk-browser@latesst",
           "@stacks/transactions": "https://esm.sh/@stacks/transactions@6.16",
           "monaco-editor": "https://esm.sh/monaco-editor@0.50",
           "monaco-textmate": "https://esm.sh/monaco-textmate@3",
@@ -115,6 +89,7 @@
         }
       }
     </script>
-    <script type="module" src="./src/scripts/app.js"></script>
-  </body>
+  <script type="module" src="./src/scripts/app.js"></script>
+</body>
+
 </html>

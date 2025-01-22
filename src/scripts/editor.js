@@ -26,6 +26,9 @@ export async function initMonacoEditor(initialContract) {
     theme: "vs-dark",
     tabFocusMode: false,
     fontSize: 14,
+    fontFamily:
+      "ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, 'DejaVu Sans Mono', monospace",
+    fontWeight: "normal",
     minimap: {
       enabled: false,
     },
@@ -62,7 +65,7 @@ export async function initMonacoEditor(initialContract) {
     navigator.clipboard.writeText(
       `${window.location.origin}/?epoch=${
         simnet?.currentEpoch
-      }&snippet=${compressAndEncode(editor.getValue())}`
+      }&snippet=${compressAndEncode(editor.getValue())}`,
     );
     markedActionButtonAsClicked(window.copyLink);
   });
