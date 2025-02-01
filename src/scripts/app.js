@@ -6,13 +6,13 @@ let initialSearchString = window.location.search;
 
 document.addEventListener("DOMContentLoaded", async () => {
   const initialContract = await getInitialContract();
-  const initialEpoch = getInitialEpoch();
+  const params = getSearchParams();
 
   const url = new URL(window.location.href);
   url.searchParams.delete("snippet");
   window.history.replaceState(null, "", url.toString());
 
-  initClarinetSDK(initialContract, initialEpoch);
+  initClarinetSDK(initialContract, params);
   initMonacoEditor(initialContract);
 });
 
@@ -33,11 +33,31 @@ async function getInitialContract() {
   return counter;
 }
 
-// get initial epoch from URL
-const validEpochs = ["2.0", "2.05", "2.1", "2.2", "2.3", "2.4", "2.5", "3.0"];
-function getInitialEpoch() {
+const validEpochs = [
+  "2.0",
+  "2.05",
+  "2.1",
+  "2.2",
+  "2.3",
+  "2.4",
+  "2.5",
+  "3.0",
+  "3.1",
+];
+
+function getSearchParams() {
   const params = new URLSearchParams(initialSearchString);
-  const epoch = params.get("epoch");
-  if (epoch && validEpochs.includes(epoch)) return epoch;
-  return null;
+
+  const remoteData = params.get("remote_data") === "true";
+  const initialHeight = remoteData ? params.get("initial_height") : null;
+  const epoch = remoteData ? null : params.get("epoch");
+
+  return {
+    remoteData,
+    initialHeight:
+      initialHeight && !isNaN(parseInt(initialHeight))
+        ? parseInt(initialHeight)
+        : null,
+    epoch: epoch && validEpochs.includes(epoch) ? epoch : null,
+  };
 }

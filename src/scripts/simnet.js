@@ -11,6 +11,13 @@ import {
 let deployed = false;
 
 /**
+ * @typedef InitOptions
+ * @property {boolean} remoteData
+ * @property {number | null} initialHeight
+ * @property {string | null} epoch
+ */
+
+/**
  * @type {Worker | null}
  */
 let simnetWorker = null;
@@ -23,9 +30,9 @@ let simnetWorker = null;
 
 /**
  * @param {string} initialContract
- * @param {string | null} initialEpoch
+ * @param {InitOptions} params
  */
-export async function initClarinetSDK(initialContract, initialEpoch) {
+export async function initClarinetSDK(initialContract, params) {
   simnetWorker = new Worker("/src/scripts/simnet-worker.js", {
     type: "module",
   });
@@ -61,7 +68,9 @@ export async function initClarinetSDK(initialContract, initialEpoch) {
   simnetWorker.postMessage({
     action: "init",
     data: {
-      initialEpoch,
+      remoteData: params.remoteData,
+      initialHeight: params.initialHeight,
+      initialEpoch: params.epoch,
     },
   });
 

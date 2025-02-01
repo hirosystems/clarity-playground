@@ -4,10 +4,12 @@ let deployer = "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM";
 let wallet_1 = "ST1SJ3DTE5DN7X54YDH5D64R3BCB6A2AG2ZQ8YPD5";
 let wallet_2 = "ST2CY5V39NHDPWSXMW9QDT3HC3GD6Q6XX4CFRK9AG";
 let wallet_3 = "ST2JHG361ZXG51QTKY2NQCVBPPRRE2KZB1HR05NNC";
+let wallets = [deployer, wallet_1, wallet_2, wallet_3];
 
 let deployed = false;
 
 /** @import { Simnet } from "@hirosystems/clarinet-sdk-browser" */
+/** @import { InitOptions } from "./simnet" */
 
 /** @type {Simnet | null} */
 let simnet = null;
@@ -24,7 +26,7 @@ let simnet = null;
 onmessage = (e) => {
   const { action, data } = e.data;
   if (action === "init") {
-    initClarinetSDK(data.initialEpoch);
+    initClarinetSDK(data);
   } else if (action === "deployContract") {
     deployContract(data.content);
   } else if (action === "executeCommand") {
@@ -63,33 +65,34 @@ function postClarityResult(value, classes) {
 }
 
 /**
- * @param {string | null} initialEpoch
+ * @param {InitOptions} options
  */
-export async function initClarinetSDK(initialEpoch) {
+export async function initClarinetSDK(options) {
   const { initSimnet, SDK } = await import(
     // @ts-ignore
-    "https://esm.sh/@hirosystems/clarinet-sdk-browser@2.13.0-beta3"
+    "https://esm.sh/@hirosystems/clarinet-sdk-browser@2.13.0-beta15"
   );
 
   // init simnet
   simnet = /** @type {Simnet} */ (await initSimnet());
   await simnet.initEmptySession({
-    enabled: true, // testing purpose, do not merge
-    // enabled: false,
-    api_url: "https://api.testnet.hiro.so",
-    initial_height: 62000,
+    enabled: options.remoteData,
+    initial_height: options.initialHeight,
+    api_url: "https://api.hiro.so",
   });
 
-  [deployer, wallet_1, wallet_2, wallet_3].forEach((address) => {
+  simnet.setLocalAccounts(wallets);
+  wallets.forEach((address) => {
     // @ts-ignore
     simnet.mintSTX(address, 1000000000n);
   });
 
   simnet.executeCommand(`::set_tx_sender ${deployer}`);
-  let defaultEpoch = SDK.getDefaultEpoch();
-  // the EpochString type isn't exported atm
-  // @ts-ignore
-  simnet.setEpoch(initialEpoch || defaultEpoch);
+  if (!options.remoteData) {
+    // the EpochString type isn't exported atm
+    // @ts-ignore
+    simnet.setEpoch(options.epoch || SDK.getDefaultEpoch());
+  }
 
   const currentEpoch = simnet.currentEpoch;
   postMessage({

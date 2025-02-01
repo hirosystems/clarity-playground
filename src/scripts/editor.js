@@ -62,13 +62,9 @@ export async function initMonacoEditor(initialContract) {
   });
 
   window.copyLink.addEventListener("click", () => {
-    const search = window.location.search;
-    const params = new URLSearchParams(search);
-    const epoch = params.get("epoch");
+    const search = window.location.search || "?";
     const snippet = compressAndEncode(editor.getValue());
-    const newUrl = epoch
-      ? `${window.location.origin}/?epoch=${epoch}&snippet=${snippet}`
-      : `${window.location.origin}/?snippet=${snippet}`;
+    const newUrl = `${window.location.origin}/${search}&snippet=${snippet}`;
     navigator.clipboard.writeText(newUrl);
     markedActionButtonAsClicked(window.copyLink);
   });
