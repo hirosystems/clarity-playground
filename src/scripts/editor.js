@@ -1,5 +1,5 @@
 import { compressAndEncode } from "./base64.js";
-import { deployContract, setDeployedStatus, simnet } from "./simnet.js";
+import { deployContract, setDeployedStatus } from "./simnet.js";
 
 /**
  * @param {string} initialContract
@@ -62,11 +62,10 @@ export async function initMonacoEditor(initialContract) {
   });
 
   window.copyLink.addEventListener("click", () => {
-    navigator.clipboard.writeText(
-      `${window.location.origin}/?epoch=${
-        simnet?.currentEpoch
-      }&snippet=${compressAndEncode(editor.getValue())}`,
-    );
+    const search = window.location.search || "?";
+    const snippet = compressAndEncode(editor.getValue());
+    const newUrl = `${window.location.origin}/${search}&snippet=${snippet}`;
+    navigator.clipboard.writeText(newUrl);
     markedActionButtonAsClicked(window.copyLink);
   });
 
