@@ -11,7 +11,7 @@
   "author": "",
   "license": "GPL-3.0",
   "devDependencies": {
-    "@hirosystems/clarinet-sdk-browser": "2.13.0-beta15",
+    "@hirosystems/clarinet-sdk-browser": "^2.13.0",
     "@stacks/transactions": "^6.16.0",
     "monaco-editor": "^0.52.0",
     "monaco-editor-textmate": "^4.0.0",

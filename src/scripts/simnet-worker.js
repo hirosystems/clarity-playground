@@ -70,7 +70,7 @@ function postClarityResult(value, classes) {
 export async function initClarinetSDK(options) {
   const { initSimnet, SDK } = await import(
     // @ts-ignore
-    "https://esm.sh/@hirosystems/clarinet-sdk-browser@2.13.0-beta15"
+    "https://esm.sh/@hirosystems/clarinet-sdk-browser@latest"
   );
 
   // init simnet
