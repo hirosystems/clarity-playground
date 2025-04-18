@@ -8,6 +8,12 @@ let wallets = [deployer, wallet_1, wallet_2, wallet_3];
 
 let deployed = false;
 
+// quick fix for the globalThis.window issue
+// the clarinet sdk expects a window object, which doesn't exists in the context of a web worker
+// the sdk should instead rely on globalThis - this will be fixed in a future version
+// @ts-ignore
+globalThis.window = globalThis;
+
 /** @import { Simnet } from "@hirosystems/clarinet-sdk-browser" */
 /** @import { InitOptions } from "./simnet" */
 
