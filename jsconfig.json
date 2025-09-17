@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "lib": ["ES6", "DOM"],
+    "lib": ["ES2024", "DOM"],
     "checkJs": true,
     "strict": true
   },
