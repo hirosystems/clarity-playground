@@ -43,6 +43,7 @@ const validEpochs = [
   "2.5",
   "3.0",
   "3.1",
+  "3.2",
 ];
 
 function getSearchParams() {

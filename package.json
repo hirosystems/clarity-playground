@@ -11,12 +11,12 @@
   "author": "",
   "license": "GPL-3.0",
   "devDependencies": {
-    "@hirosystems/clarinet-sdk-browser": "^3.0.1",
-    "@stacks/transactions": "^6.16.0",
-    "monaco-editor": "^0.52.0",
-    "monaco-editor-textmate": "^4.0.0",
-    "monaco-textmate": "^3.0.1",
-    "onigasm": "^2.2.5",
-    "serve": "^14.2.3"
+    "@hirosystems/clarinet-sdk-browser": "3.6.1",
+    "@stacks/transactions": "7.2.0",
+    "monaco-editor": "0.53.0",
+    "monaco-editor-textmate": "4.0.0",
+    "monaco-textmate": "3.0.1",
+    "onigasm": "2.2.5",
+    "serve": "14.2.5"
   }
 }
