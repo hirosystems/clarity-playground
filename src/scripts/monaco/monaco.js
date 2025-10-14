@@ -1,5 +1,5 @@
 /* @ts-ignore */
-import editorWorker from "https://esm.sh/monaco-editor@0.49/esm/vs/editor/editor.worker?worker";
+import editorWorker from "https://esm.sh/monaco-editor@0.54.0/esm/vs/editor/editor.worker?worker";
 
 import * as monaco from "monaco-editor";
 import { Registry } from "monaco-textmate";

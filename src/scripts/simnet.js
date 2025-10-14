@@ -70,7 +70,7 @@ export async function initClarinetSDK(initialContract, params) {
     data: {
       remoteData: params.remoteData,
       initialHeight: params.initialHeight,
-      initialEpoch: params.epoch,
+      epoch: params.epoch,
     },
   });
 

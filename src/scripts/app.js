@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   url.searchParams.delete("snippet");
   window.history.replaceState(null, "", url.toString());
 
+  console.log(params);
   initClarinetSDK(initialContract, params);
   initMonacoEditor(initialContract);
 });
