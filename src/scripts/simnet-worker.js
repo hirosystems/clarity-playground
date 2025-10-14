@@ -31,7 +31,6 @@ let simnet = null;
  */
 onmessage = (e) => {
   const { action, data } = e.data;
-  console.log("worker received", action, data);
   if (action === "init") {
     initClarinetSDK(data);
   } else if (action === "deployContract") {
@@ -95,8 +94,6 @@ export async function initClarinetSDK(options) {
 
   simnet.executeCommand(`::set_tx_sender ${deployer}`);
   if (!options.remoteData) {
-    console.log("-".repeat(20));
-    console.log(options.epoch);
     // the EpochString type isn't exported atm
     // @ts-ignore
     simnet.setEpoch(options.epoch || SDK.getDefaultEpoch());
