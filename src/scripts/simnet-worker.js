@@ -86,7 +86,6 @@ export async function initClarinetSDK(options) {
     initial_height: options.initialHeight,
     api_url: "https://api.hiro.so",
   });
-
   simnet.setLocalAccounts(wallets);
   wallets.forEach((address) => {
     // @ts-ignore

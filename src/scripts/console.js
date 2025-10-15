@@ -92,42 +92,6 @@ export function addCommandToHistory(command) {
 }
 
 /**
- * @arg {import("@hirosystems/clarinet-sdk-browser").Simnet | null} simnet
- * @arg {string} command
- */
-export function executeCommand(simnet, command) {
-  if (!simnet) return;
-
-  let trimmedCommand = command.trim();
-  if (!trimmedCommand) return;
-
-  appendOutput(trimmedCommand, ["command"]);
-
-  try {
-    if (trimmedCommand.startsWith("::")) {
-      const result = simnet.executeCommand(trimmedCommand);
-      if (
-        trimmedCommand.startsWith("::set_epoch") &&
-        result.startsWith("Epoch updated to")
-      ) {
-        setEpochInSearchParams(simnet.currentEpoch);
-      }
-      appendOutput(result, ["log"]);
-      return;
-    }
-    let { result, events } = simnet.execute(trimmedCommand);
-    console.log("events", events);
-    appendOutput(Cl.prettyPrint(result, 2), ["success"]);
-  } catch (e) {
-    if (typeof e === "string") {
-      appendOutput(e, ["error"]);
-    } else {
-      console.warn("error", e);
-    }
-  }
-}
-
-/**
  * @param {string} text
  * @param {string[]} classes
  */

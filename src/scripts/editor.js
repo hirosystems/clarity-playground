@@ -36,7 +36,7 @@ export async function initMonacoEditor(initialContract) {
   });
 
   window.addEventListener("resize", () => {
-    const showLineNumber = editor.getOption(68).renderType === 1;
+    const showLineNumber = editor.getOption(68);
     if (window.innerWidth <= 860 && showLineNumber) {
       editor.updateOptions(smallScreenOptions);
     } else if (window.innerWidth > 860 && !showLineNumber) {
